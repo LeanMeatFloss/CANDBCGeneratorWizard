@@ -5,6 +5,8 @@ VisualStudioVersion = 15.0.26124.0
 MinimumVisualStudioVersion = 15.0.26124.0
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "GeneratorWizard", "GeneratorWizard\GeneratorWizard.csproj", "{17AB37CA-7ED9-4D90-B4AC-D4A76EAF1794}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Excel_DBC_Template_Reader", "Excel_DBC_Template_Reader\Excel_DBC_Template_Reader.csproj", "{DC31A7D9-9CFB-4E74-9C6F-4481A61F2D4A}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -30,5 +32,17 @@ Global
 		{17AB37CA-7ED9-4D90-B4AC-D4A76EAF1794}.Release|x64.Build.0 = Release|Any CPU
 		{17AB37CA-7ED9-4D90-B4AC-D4A76EAF1794}.Release|x86.ActiveCfg = Release|Any CPU
 		{17AB37CA-7ED9-4D90-B4AC-D4A76EAF1794}.Release|x86.Build.0 = Release|Any CPU
+		{DC31A7D9-9CFB-4E74-9C6F-4481A61F2D4A}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{DC31A7D9-9CFB-4E74-9C6F-4481A61F2D4A}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{DC31A7D9-9CFB-4E74-9C6F-4481A61F2D4A}.Debug|x64.ActiveCfg = Debug|Any CPU
+		{DC31A7D9-9CFB-4E74-9C6F-4481A61F2D4A}.Debug|x64.Build.0 = Debug|Any CPU
+		{DC31A7D9-9CFB-4E74-9C6F-4481A61F2D4A}.Debug|x86.ActiveCfg = Debug|Any CPU
+		{DC31A7D9-9CFB-4E74-9C6F-4481A61F2D4A}.Debug|x86.Build.0 = Debug|Any CPU
+		{DC31A7D9-9CFB-4E74-9C6F-4481A61F2D4A}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{DC31A7D9-9CFB-4E74-9C6F-4481A61F2D4A}.Release|Any CPU.Build.0 = Release|Any CPU
+		{DC31A7D9-9CFB-4E74-9C6F-4481A61F2D4A}.Release|x64.ActiveCfg = Release|Any CPU
+		{DC31A7D9-9CFB-4E74-9C6F-4481A61F2D4A}.Release|x64.Build.0 = Release|Any CPU
+		{DC31A7D9-9CFB-4E74-9C6F-4481A61F2D4A}.Release|x86.ActiveCfg = Release|Any CPU
+		{DC31A7D9-9CFB-4E74-9C6F-4481A61F2D4A}.Release|x86.Build.0 = Release|Any CPU
 	EndGlobalSection
 EndGlobal
