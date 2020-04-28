@@ -1,0 +1,3 @@
+[submodule "SubModules/NetCoreSystemEnvHelper"]
+	path = SubModules/NetCoreSystemEnvHelper
+	url = S:/WorkSpaces/.NetCore/SubModules/NetCoreSystemEnvHelper
