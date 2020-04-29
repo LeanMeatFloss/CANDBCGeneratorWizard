@@ -37,7 +37,7 @@ namespace ConfigureTemplateEx
             var signalList = (ComConfigure as ArxmlFormater.ElementHelper.IHasContainersElement)
                 .Containers.Where (ele => ele.ElementName.Equals ("ComConfig"))
                 .Cast<ArxmlFormater.ElementHelper.IHasSubContainers> ().FirstOrDefault ().SubContainers
-                .Where (ele => (ele as ArxmlFormater.ElementHelper.ISupportDefinitionRefElement).DefinitionRef.Contains ("ComSignal")).ToList ();
+                .Where (ele => (ele as ArxmlFormater.ElementHelper.ISupportDefinitionRefElement).DefinitionRef.EndsWith ("ComSignal")).ToList ();
             foreach (ArxmlFormater.ElementHelper.IHasParameters signal in signalList)
             {
                 //获取BitSize

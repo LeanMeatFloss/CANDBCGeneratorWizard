@@ -19,6 +19,8 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "DBCParser", "DBCParser\DBCP
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "DBCParser.Tests", "DBCParser.Tests\DBCParser.Tests.csproj", "{8962E70B-24F0-4D9C-8022-10232E39055B}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ArxmlTemplateDealer", "ArxmlTemplateDealer\ArxmlTemplateDealer.csproj", "{B3910092-28E4-40F5-8DB0-1C365FE8BDF4}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -116,6 +118,18 @@ Global
 		{8962E70B-24F0-4D9C-8022-10232E39055B}.Release|x64.Build.0 = Release|Any CPU
 		{8962E70B-24F0-4D9C-8022-10232E39055B}.Release|x86.ActiveCfg = Release|Any CPU
 		{8962E70B-24F0-4D9C-8022-10232E39055B}.Release|x86.Build.0 = Release|Any CPU
+		{B3910092-28E4-40F5-8DB0-1C365FE8BDF4}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{B3910092-28E4-40F5-8DB0-1C365FE8BDF4}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{B3910092-28E4-40F5-8DB0-1C365FE8BDF4}.Debug|x64.ActiveCfg = Debug|Any CPU
+		{B3910092-28E4-40F5-8DB0-1C365FE8BDF4}.Debug|x64.Build.0 = Debug|Any CPU
+		{B3910092-28E4-40F5-8DB0-1C365FE8BDF4}.Debug|x86.ActiveCfg = Debug|Any CPU
+		{B3910092-28E4-40F5-8DB0-1C365FE8BDF4}.Debug|x86.Build.0 = Debug|Any CPU
+		{B3910092-28E4-40F5-8DB0-1C365FE8BDF4}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{B3910092-28E4-40F5-8DB0-1C365FE8BDF4}.Release|Any CPU.Build.0 = Release|Any CPU
+		{B3910092-28E4-40F5-8DB0-1C365FE8BDF4}.Release|x64.ActiveCfg = Release|Any CPU
+		{B3910092-28E4-40F5-8DB0-1C365FE8BDF4}.Release|x64.Build.0 = Release|Any CPU
+		{B3910092-28E4-40F5-8DB0-1C365FE8BDF4}.Release|x86.ActiveCfg = Release|Any CPU
+		{B3910092-28E4-40F5-8DB0-1C365FE8BDF4}.Release|x86.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(NestedProjects) = preSolution
 		{B914B69C-A6F1-4147-A4A2-CB5722A4B2AC} = {6484A091-2778-4FE8-A47E-E50406604840}

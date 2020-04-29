@@ -1,0 +1,35 @@
+{
+    "ComStack": {
+        "Template": [
+            {
+                "SearchingElement": {
+                    "SHORT-NAME": "Com"
+                },
+                "SearchingContainer": {
+                    "SHORT-NAME": "ComConfig"
+                },
+                "SearchingSubContainer": {
+                    "Definition-Ref": "^[\\S]*ComSignal$"
+                },
+                "ParametersTemplate": {
+                    "ComTransferProperty": {
+                        "__RX__": "PENDING"
+                    },
+                    "ComFirstTimeout": {
+                        "__RX__": "{__TRANSFER_TIME_LOOP__}*10"
+                    },
+                    "ComTimeout": {
+                        "__RX__": "{__TRANSFER_TIME_LOOP__}*10"
+                    },
+                    "ComNotification": {
+                        "__RX__": "Rte_COMCbk_{__ARXML__.__SHORT_NAME__}"
+                    },
+                    "ComTimeoutNotification": {
+                        "__RX__": "Rte_ComCbkTOut_{__ARXML__.__SHORT_NAME__}"
+                    },
+                    "ComErrorNotification": null
+                }
+            }
+        ]
+    }
+}

@@ -6,6 +6,35 @@ namespace ArxmlFormater.AR_PackageHelper
 {
     public class AR_PackageBase
     {
+        public static IEnumerable<AR_PackageBase> ReadArxmlFileRoot (XElement root)
+        {
+            return root.Elements ().Where (ele => ele.Name.LocalName.Equals ("AR-PACKAGES")).FirstOrDefault ().Elements ().Select (ele => new ArxmlFormater.AR_PackageHelper.AR_PackageBase () { AR_PackageArxml = ele });
+        }
+        public static void GetAllARPackagesAndElements (AR_PackageBase packageSet, IList<AR_PackageBase> packageList, IList<ElementBase> elementList)
+        {
+            if (packageSet.Elements != null)
+            {
+                if (packageList != null)
+                {
+                    packageList.Add (packageSet);
+                }
+                if (elementList != null)
+                {
+                    foreach (var element in packageSet.Elements)
+                    {
+                        elementList.Add (element);
+                    }
+                }
+
+            }
+            if (packageSet.AR_Packages != null)
+            {
+                foreach (var package in packageSet.AR_Packages)
+                {
+                    GetAllARPackagesAndElements (package, packageList, elementList);
+                }
+            }
+        }
         public XElement AR_PackageArxml { get; set; }
         public string Path { get; set; } = "";
         public string PackageName
