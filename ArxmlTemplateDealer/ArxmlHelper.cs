@@ -5,9 +5,9 @@ using ArxmlFormater.ElementHelper;
 using Newtonsoft.Json.Linq;
 namespace ArxmlTemplateDealer
 {
-    public class ArxmlSearchingHelper
+    public class ArxmlHelper
     {
-        public static IList<ElementBase> SearchingByConfigure (JObject configure, IList<ElementBase> elementList)
+        public static IList<ElementBase> SearchingElementsByConfigure (JObject configure, IList<ElementBase> elementList)
         {
             IEnumerable<ElementBase> result = elementList;
             if (configure.ContainsKey ("SearchingElement"))

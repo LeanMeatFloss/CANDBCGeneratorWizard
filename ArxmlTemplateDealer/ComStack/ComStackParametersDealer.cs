@@ -13,7 +13,7 @@ namespace ArxmlTemplateDealer.Com.ComConfig.ComSignals
             string filePath = FileSysHelper.GetCurrentAppLocationPath () + "\\Resources\\ArxmlTemplateDealerResources\\Template.json";
             //Seraching to locate
             JObject canStackConfigureTemplate = JObject.Parse (File.ReadAllText (filePath)).Value<JObject> ("ComStack");
-            IEnumerable<ElementBase> fliteredElements = ArxmlSearchingHelper.SearchingByConfigure (canStackConfigureTemplate, elementList);
+            IEnumerable<ElementBase> fliteredElements = ArxmlHelper.SearchingElementsByConfigure (canStackConfigureTemplate, elementList);
             //Configure the parameters By ParametersTemplate
             JObject canStackConfigureParametersTemplate = canStackConfigureTemplate.Value<JObject> ("ParametersTemplate");
 
