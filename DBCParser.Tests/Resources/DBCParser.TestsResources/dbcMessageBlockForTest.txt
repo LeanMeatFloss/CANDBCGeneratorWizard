@@ -1,0 +1,8 @@
+﻿BO_ 16 Pt_Veh_1: 8 EMS
+ SG_ Pt_tiEdrvShOff : 50|12@1+ (1,0) [0|4095] "min"  ED
+ SG_ Pt_tAmbEdrv : 42|8@1+ (1,-40) [-40|215] "deg_C"  ED
+ SG_ Pt_vVeh : 30|12@1+ (0.1,0) [0|409.5] "kilometerPerHour"  ED
+ SG_ Pt_nEng : 16|14@1+ (1,0) [0|16383] "rpm"  ED
+ SG_ Pt_stIgnSwt : 12|3@1+ (1,0) [0|7] ""  ED
+ SG_ Pt_nrAlvCntrIgn : 8|4@1+ (1,0) [0|15] ""  ED
+ SG_ Pt_nrChksIgn : 0|8@1+ (1,0) [0|255] ""  ED

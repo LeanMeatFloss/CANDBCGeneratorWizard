@@ -5,7 +5,8 @@ namespace DBCParser
     {
         public uint MessageId { get; set; }
         public string MessageName { get; set; }
-        public uint DLC { get; set; }
+        public uint MessageSize { get; set; }
+        public string Transmitter { get; set; }
         public IList<SignalItem> SignalList { get; set; }
     }
 }
