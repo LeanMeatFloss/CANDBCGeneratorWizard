@@ -1,11 +1,15 @@
 <Project Sdk="Microsoft.NET.Sdk">
   <PropertyGroup>
     <TargetFramework>netcoreapp3.1</TargetFramework>
+    <LangVersion>8.0</LangVersion>
   </PropertyGroup>
+
   <ItemGroup>
     <Content Include="Resources\*.*">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </Content>
+    <ProjectReference Include="..\SubModules\NetCoreSystemEnvHelper\NetCoreSystemEnvHelper.csproj" />
     <PackageReference Include="Newtonsoft.Json" Version="12.0.3" />
+
   </ItemGroup>
 </Project>

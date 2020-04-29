@@ -1,1 +1,28 @@
-{}
+{
+    "ECUcParamType": {
+        "Numerical": "ECUC-NUMERICAL-PARAM-VALUE",
+        "Textual": "ECUC-TEXTUAL-PARAM-VALUE"
+    },
+    "ECUcParamDestinationDef": {
+        "Integer": "ECUC-INTEGER-PARAM-DEF",
+        "Float": "ECUC-FLOAT-PARAM-DEF",
+        "FunctionName": "ECUC-FUNCTION-NAME-DEF",
+        "Enumeration": "ECUC-ENUMERATION-PARAM-DEF"
+    },
+    "ECUcDefinition": {
+        "ComSignal": {
+            "Path": "/AUTOSAR_Com/EcucModuleDefs/Com/ComConfig/ComSignal",
+            "SubParameters": {
+                "ComBitPosition": {
+                    "Path": "/AUTOSAR_Com/EcucModuleDefs/Com/ComConfig/ComSignal/ComBitPosition"
+                },
+                "ComBitSize": {
+                    "Path": "/AUTOSAR_Com/EcucModuleDefs/Com/ComConfig/ComSignal/ComBitSize"
+                },
+                "ComFirstTimeout": {
+                    "Path": "/AUTOSAR_Com/EcucModuleDefs/Com/ComConfig/ComSignal/ComFirstTimeout",
+                }
+            }
+        }
+    }
+}
