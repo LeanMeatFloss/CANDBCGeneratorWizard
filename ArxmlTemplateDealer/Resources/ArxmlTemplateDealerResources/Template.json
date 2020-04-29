@@ -12,22 +12,22 @@
                     "DEFINITION-REF": "^[\\S]*ComSignal$"
                 },
                 "ParametersTemplate": {
-                    "ComTransferProperty": {
+                    "^[\\S]*ComTransferProperty$": {
                         "__RX__": "PENDING"
                     },
-                    "ComFirstTimeout": {
+                    "^[\\S]*ComFirstTimeout$": {
                         "__RX__": "{__TRANSFER_TIME_LOOP__}*10"
                     },
-                    "ComTimeout": {
+                    "^[\\S]*ComTimeout$": {
                         "__RX__": "{__TRANSFER_TIME_LOOP__}*10"
                     },
-                    "ComNotification": {
+                    "^[\\S]*ComNotification$": {
                         "__RX__": "Rte_COMCbk_{__ARXML__.__SHORT_NAME__}"
                     },
-                    "ComTimeoutNotification": {
+                    "^[\\S]*ComTimeoutNotification$": {
                         "__RX__": "Rte_ComCbkTOut_{__ARXML__.__SHORT_NAME__}"
                     },
-                    "ComErrorNotification": null
+                    "^[\\S]*ComErrorNotification$": null
                 }
             }
         ]
