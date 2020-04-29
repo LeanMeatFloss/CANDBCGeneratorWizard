@@ -9,7 +9,7 @@
                     "SHORT-NAME": "ComConfig"
                 },
                 "SearchingSubContainer": {
-                    "Definition-Ref": "^[\\S]*ComSignal$"
+                    "DEFINITION-REF": "^[\\S]*ComSignal$"
                 },
                 "ParametersTemplate": {
                     "ComTransferProperty": {

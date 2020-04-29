@@ -1,12 +1,16 @@
 <Project Sdk="Microsoft.NET.Sdk">
-
   <ItemGroup>
-    <ProjectReference Include="..\DBCParser\DBCParser.csproj" />
-    <ProjectReference Include="..\ArxmlFormater\ArxmlFormater.csproj" />
+    <Content Include="Resources\**">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
+    <ProjectReference Include="..\DBCParser\DBCParser.csproj"/>
+    <ProjectReference Include="..\ArxmlFormater\ArxmlFormater.csproj"/>
+    <ProjectReference Include="..\SubModules\NetCoreSystemEnvHelper\NetCoreSystemEnvHelper.csproj"/>
   </ItemGroup>
-
+  <ItemGroup>
+    <PackageReference Include="Newtonsoft.Json" Version="12.0.3"/>
+  </ItemGroup>
   <PropertyGroup>
     <TargetFramework>netcoreapp3.1</TargetFramework>
   </PropertyGroup>
-
 </Project>
