@@ -4,7 +4,7 @@ using ArxmlFormater.ElementHelper;
 using DBCParser;
 using NetCoreSystemEnvHelper;
 using Newtonsoft.Json.Linq;
-namespace ArxmlTemplateDealer.Com.ComConfig.ComSignals
+namespace ArxmlTemplateDealer.ComStack
 {
     public class ComStackParametersDealer
     {
@@ -12,11 +12,15 @@ namespace ArxmlTemplateDealer.Com.ComConfig.ComSignals
         {
             string filePath = FileSysHelper.GetCurrentAppLocationPath () + "\\Resources\\ArxmlTemplateDealerResources\\Template.json";
             //Seraching to locate
-            JObject canStackConfigureTemplate = JObject.Parse (File.ReadAllText (filePath)).Value<JObject> ("ComStack");
-            IEnumerable<ElementBase> fliteredElements = ArxmlHelper.SearchingElementsByConfigure (canStackConfigureTemplate, elementList);
-            //Configure the parameters By ParametersTemplate
-            JObject canStackConfigureParametersTemplate = canStackConfigureTemplate.Value<JObject> ("ParametersTemplate");
+            var canStackConfigureTemplateList = JObject.Parse (File.ReadAllText (filePath)).Value<JObject> ("ComStack").Value<JArray> ("Template");
+            foreach (JObject template in canStackConfigureTemplateList)
+            {
+                IEnumerable<ElementBase> fliteredElements = ArxmlHelper.SearchingElementsByConfigure (template, elementList);
+                //Configure the parameters By ParametersTemplate
+                JObject canStackConfigureParametersTemplate = template.Value<JObject> ("ParametersTemplate");
+            }
 
+            //  var list = ArxmlTemplateDealer.ArxmlHelper.SearchingElementsByConfigure (canStackConfigureParametersTemplate, elementList);
         }
 
     }

@@ -38,7 +38,7 @@ namespace ProjectHelper
 
                         foreach (var pattern in matchPattern)
                         {
-                            if (Regex.IsMatch (fileInfo.FullName, pattern))
+                            if (Regex.IsMatch (fileInfo.FullName, pattern, RegexOptions.Multiline))
                             {
                                 isMatch = true;
                                 break;
@@ -55,7 +55,7 @@ namespace ProjectHelper
 
                         foreach (var pattern in exceptPattern)
                         {
-                            if (Regex.IsMatch (fileInfo.FullName, pattern))
+                            if (Regex.IsMatch (fileInfo.FullName, pattern, RegexOptions.Multiline))
                             {
                                 isMatch = false;
                                 break;

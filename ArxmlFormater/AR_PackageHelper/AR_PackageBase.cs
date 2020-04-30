@@ -6,9 +6,18 @@ namespace ArxmlFormater.AR_PackageHelper
 {
     public class AR_PackageBase
     {
-        public static IEnumerable<AR_PackageBase> ReadArxmlFileRoot (XElement root)
+        public static IEnumerable<AR_PackageBase> ReadArxmlFileRoot (XElement root, string filePath)
         {
-            return root.Elements ().Where (ele => ele.Name.LocalName.Equals ("AR-PACKAGES")).FirstOrDefault ().Elements ().Select (ele => new ArxmlFormater.AR_PackageHelper.AR_PackageBase () { AR_PackageArxml = ele });
+
+            var res = root.Elements ().Where (ele => ele.Name.LocalName.Equals ("AR-PACKAGES")).FirstOrDefault ()?.Elements ().Select (ele => new ArxmlFormater.AR_PackageHelper.AR_PackageBase () { AR_PackageArxml = ele, FilePath = filePath });
+            if (res == null)
+            {
+                return new List<AR_PackageBase> ();
+            }
+            else
+            {
+                return res;
+            }
         }
         public static void GetAllARPackagesAndElements (AR_PackageBase packageSet, IList<AR_PackageBase> packageList, IList<ElementBase> elementList)
         {
@@ -35,6 +44,7 @@ namespace ArxmlFormater.AR_PackageHelper
                 }
             }
         }
+        public string FilePath { get; set; }
         public XElement AR_PackageArxml { get; set; }
         public string Path { get; set; } = "";
         public string PackageName
@@ -48,7 +58,7 @@ namespace ArxmlFormater.AR_PackageHelper
                     AR_PackageArxml.Elements ().Where (ele => ele.Name.LocalName.Equals ("SHORT-NAME")).FirstOrDefault ().Value = value;
             }
         }
-        public IEnumerable<ElementBase> Elements => AR_PackageArxml.Elements ().Where (ele => ele.Name.LocalName.Equals ("ELEMENTS")).FirstOrDefault ()?.Elements ().Select (ele => new ElementBase () { ArxmlElement = ele });
-        public IEnumerable<AR_PackageBase> AR_Packages => AR_PackageArxml.Elements ().Where (ele => ele.Name.LocalName.Equals ("AR-PACKAGES")).FirstOrDefault ()?.Elements ().Select (ele => new AR_PackageBase () { AR_PackageArxml = ele, Path = Path + "/" + PackageName });
+        public IEnumerable<ElementBase> Elements => AR_PackageArxml.Elements ().Where (ele => ele.Name.LocalName.Equals ("ELEMENTS")).FirstOrDefault ()?.Elements ().Select (ele => new ElementBase () { ArxmlElement = ele, FilePath = FilePath });
+        public IEnumerable<AR_PackageBase> AR_Packages => AR_PackageArxml.Elements ().Where (ele => ele.Name.LocalName.Equals ("AR-PACKAGES")).FirstOrDefault ()?.Elements ().Select (ele => new AR_PackageBase () { AR_PackageArxml = ele, FilePath = FilePath, Path = Path + "/" + PackageName });
     }
 }

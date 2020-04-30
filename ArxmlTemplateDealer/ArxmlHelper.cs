@@ -33,12 +33,12 @@ namespace ArxmlTemplateDealer
             }
             if (configure.ContainsKey ("SearchingContainer"))
             {
-                result = result.SelectMany (ele => (ele as IHasContainersElement).Containers);
+                result = result.Where (ele => (ele as IHasContainersElement).Containers != null).SelectMany (ele => (ele as IHasContainersElement).Containers);
                 result = SeachingByConfigureDetail (configure.Value<JObject> ("SearchingContainer"), result);
             }
             if (configure.ContainsKey ("SearchingSubContainer"))
             {
-                result = result.SelectMany (ele => (ele as IHasSubContainers).SubContainers);
+                result = result.Where (ele => (ele as IHasSubContainers).SubContainers != null).SelectMany (ele => (ele as IHasSubContainers).SubContainers);
                 result = SeachingByConfigureDetail (configure.Value<JObject> ("SearchingSubContainer"), result);
             }
             return result.ToList ();
@@ -47,11 +47,11 @@ namespace ArxmlTemplateDealer
         {
             if (configureDetail.ContainsKey ("SHORT-NAME"))
             {
-                elements = elements.Where (ele => Regex.IsMatch (ele.ElementName, configureDetail.Value<string> ("SHORT-NAME")));
+                elements = elements.Where (ele => Regex.IsMatch (ele.ElementName?? "", configureDetail.Value<string> ("SHORT-NAME"), RegexOptions.Multiline));
             }
             if (configureDetail.ContainsKey ("DEFINITION-REF"))
             {
-                elements = elements.Where (ele => Regex.IsMatch ((ele as ISupportDefinitionRefElement).DefinitionRef, configureDetail.Value<string> ("DEFINITION-REF")));
+                elements = elements.Where (ele => Regex.IsMatch ((ele as ISupportDefinitionRefElement).DefinitionRef?? "", configureDetail.Value<string> ("DEFINITION-REF"), RegexOptions.Multiline));
             }
             return elements;
         }
