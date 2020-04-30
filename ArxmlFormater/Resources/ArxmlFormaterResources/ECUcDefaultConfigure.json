@@ -20,7 +20,7 @@
                     "Path": "/AUTOSAR_Com/EcucModuleDefs/Com/ComConfig/ComSignal/ComBitSize"
                 },
                 "ComFirstTimeout": {
-                    "Path": "/AUTOSAR_Com/EcucModuleDefs/Com/ComConfig/ComSignal/ComFirstTimeout",
+                    "Path": "/AUTOSAR_Com/EcucModuleDefs/Com/ComConfig/ComSignal/ComFirstTimeout"
                 }
             }
         }

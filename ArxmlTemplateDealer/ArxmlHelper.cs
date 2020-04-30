@@ -15,6 +15,7 @@ namespace ArxmlTemplateDealer
                 foreach (var element in elementsList)
                 {
                     var parameterItem = element.Parameters.Where (parameter => Regex.IsMatch (parameter.DefinitionRef, templateItem.Key)).FirstOrDefault ();
+                    //if cannot searching the items ,try to search the master container‘s parameter define
                     if (parameterItem == null)
                     {
 
@@ -22,36 +23,37 @@ namespace ArxmlTemplateDealer
                 }
 
             }
-            public static IList<ElementBase> SearchingElementsByConfigure (JObject configure, IList<ElementBase> elementList)
+        }
+        public static IList<ElementBase> SearchingElementsByConfigure (JObject configure, IList<ElementBase> elementList)
+        {
+            IEnumerable<ElementBase> result = elementList;
+            if (configure.ContainsKey ("SearchingElement"))
             {
-                IEnumerable<ElementBase> result = elementList;
-                if (configure.ContainsKey ("SearchingElement"))
-                {
-                    result = SeachingByConfigureDetail (configure.Value<JObject> ("SearchingElement"), result);
-                }
-                if (configure.ContainsKey ("SearchingContainer"))
-                {
-                    result = result.SelectMany (ele => (ele as IHasContainersElement).Containers);
-                    result = SeachingByConfigureDetail (configure.Value<JObject> ("SearchingContainer"), result);
-                }
-                if (configure.ContainsKey ("SearchingSubContainer"))
-                {
-                    result = result.SelectMany (ele => (ele as IHasSubContainers).SubContainers);
-                    result = SeachingByConfigureDetail (configure.Value<JObject> ("SearchingSubContainer"), result);
-                }
-                return result.ToList ();
+                result = SeachingByConfigureDetail (configure.Value<JObject> ("SearchingElement"), result);
             }
-            static IEnumerable<ElementBase> SeachingByConfigureDetail (JObject configureDetail, IEnumerable<ElementBase> elements)
+            if (configure.ContainsKey ("SearchingContainer"))
             {
-                if (configureDetail.ContainsKey ("SHORT-NAME"))
-                {
-                    elements = elements.Where (ele => Regex.IsMatch (ele.ElementName, configureDetail.Value<string> ("SHORT-NAME")));
-                }
-                if (configureDetail.ContainsKey ("DEFINITION-REF"))
-                {
-                    elements = elements.Where (ele => Regex.IsMatch ((ele as ISupportDefinitionRefElement).DefinitionRef, configureDetail.Value<string> ("DEFINITION-REF")));
-                }
-                return elements;
+                result = result.SelectMany (ele => (ele as IHasContainersElement).Containers);
+                result = SeachingByConfigureDetail (configure.Value<JObject> ("SearchingContainer"), result);
             }
+            if (configure.ContainsKey ("SearchingSubContainer"))
+            {
+                result = result.SelectMany (ele => (ele as IHasSubContainers).SubContainers);
+                result = SeachingByConfigureDetail (configure.Value<JObject> ("SearchingSubContainer"), result);
+            }
+            return result.ToList ();
+        }
+        static IEnumerable<ElementBase> SeachingByConfigureDetail (JObject configureDetail, IEnumerable<ElementBase> elements)
+        {
+            if (configureDetail.ContainsKey ("SHORT-NAME"))
+            {
+                elements = elements.Where (ele => Regex.IsMatch (ele.ElementName, configureDetail.Value<string> ("SHORT-NAME")));
+            }
+            if (configureDetail.ContainsKey ("DEFINITION-REF"))
+            {
+                elements = elements.Where (ele => Regex.IsMatch ((ele as ISupportDefinitionRefElement).DefinitionRef, configureDetail.Value<string> ("DEFINITION-REF")));
+            }
+            return elements;
         }
     }
+}

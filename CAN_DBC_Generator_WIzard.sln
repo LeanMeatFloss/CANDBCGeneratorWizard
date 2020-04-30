@@ -21,6 +21,10 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "DBCParser.Tests", "DBCParse
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ArxmlTemplateDealer", "ArxmlTemplateDealer\ArxmlTemplateDealer.csproj", "{B3910092-28E4-40F5-8DB0-1C365FE8BDF4}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ProjectHelper", "ProjectHelper\ProjectHelper.csproj", "{318BB671-374F-46FF-8253-00B0A8AEAE49}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ArxmlTemplateDealer.Tests", "ArxmlTemplateDealer.Tests\ArxmlTemplateDealer.Tests.csproj", "{F31B9DF4-0E2B-46BB-9242-458E89C6BEBA}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -130,6 +134,30 @@ Global
 		{B3910092-28E4-40F5-8DB0-1C365FE8BDF4}.Release|x64.Build.0 = Release|Any CPU
 		{B3910092-28E4-40F5-8DB0-1C365FE8BDF4}.Release|x86.ActiveCfg = Release|Any CPU
 		{B3910092-28E4-40F5-8DB0-1C365FE8BDF4}.Release|x86.Build.0 = Release|Any CPU
+		{318BB671-374F-46FF-8253-00B0A8AEAE49}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{318BB671-374F-46FF-8253-00B0A8AEAE49}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{318BB671-374F-46FF-8253-00B0A8AEAE49}.Debug|x64.ActiveCfg = Debug|Any CPU
+		{318BB671-374F-46FF-8253-00B0A8AEAE49}.Debug|x64.Build.0 = Debug|Any CPU
+		{318BB671-374F-46FF-8253-00B0A8AEAE49}.Debug|x86.ActiveCfg = Debug|Any CPU
+		{318BB671-374F-46FF-8253-00B0A8AEAE49}.Debug|x86.Build.0 = Debug|Any CPU
+		{318BB671-374F-46FF-8253-00B0A8AEAE49}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{318BB671-374F-46FF-8253-00B0A8AEAE49}.Release|Any CPU.Build.0 = Release|Any CPU
+		{318BB671-374F-46FF-8253-00B0A8AEAE49}.Release|x64.ActiveCfg = Release|Any CPU
+		{318BB671-374F-46FF-8253-00B0A8AEAE49}.Release|x64.Build.0 = Release|Any CPU
+		{318BB671-374F-46FF-8253-00B0A8AEAE49}.Release|x86.ActiveCfg = Release|Any CPU
+		{318BB671-374F-46FF-8253-00B0A8AEAE49}.Release|x86.Build.0 = Release|Any CPU
+		{F31B9DF4-0E2B-46BB-9242-458E89C6BEBA}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{F31B9DF4-0E2B-46BB-9242-458E89C6BEBA}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{F31B9DF4-0E2B-46BB-9242-458E89C6BEBA}.Debug|x64.ActiveCfg = Debug|Any CPU
+		{F31B9DF4-0E2B-46BB-9242-458E89C6BEBA}.Debug|x64.Build.0 = Debug|Any CPU
+		{F31B9DF4-0E2B-46BB-9242-458E89C6BEBA}.Debug|x86.ActiveCfg = Debug|Any CPU
+		{F31B9DF4-0E2B-46BB-9242-458E89C6BEBA}.Debug|x86.Build.0 = Debug|Any CPU
+		{F31B9DF4-0E2B-46BB-9242-458E89C6BEBA}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{F31B9DF4-0E2B-46BB-9242-458E89C6BEBA}.Release|Any CPU.Build.0 = Release|Any CPU
+		{F31B9DF4-0E2B-46BB-9242-458E89C6BEBA}.Release|x64.ActiveCfg = Release|Any CPU
+		{F31B9DF4-0E2B-46BB-9242-458E89C6BEBA}.Release|x64.Build.0 = Release|Any CPU
+		{F31B9DF4-0E2B-46BB-9242-458E89C6BEBA}.Release|x86.ActiveCfg = Release|Any CPU
+		{F31B9DF4-0E2B-46BB-9242-458E89C6BEBA}.Release|x86.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(NestedProjects) = preSolution
 		{B914B69C-A6F1-4147-A4A2-CB5722A4B2AC} = {6484A091-2778-4FE8-A47E-E50406604840}
