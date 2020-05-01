@@ -19,6 +19,7 @@ namespace ArxmlFormater.AR_PackageHelper
                 return res;
             }
         }
+
         public static void GetAllARPackagesAndElements (AR_PackageBase packageSet, IList<AR_PackageBase> packageList, IList<ElementBase> elementList)
         {
             if (packageSet.Elements != null)
@@ -46,7 +47,7 @@ namespace ArxmlFormater.AR_PackageHelper
         }
         public string FilePath { get; set; }
         public XElement AR_PackageArxml { get; set; }
-        public string Path { get; set; } = "";
+        public string Path { get; set; } = "/";
         public string PackageName
         {
             get => AR_PackageArxml.Elements ().Where (ele => ele.Name.LocalName.Equals ("SHORT-NAME")).FirstOrDefault ()?.Value;
@@ -58,7 +59,7 @@ namespace ArxmlFormater.AR_PackageHelper
                     AR_PackageArxml.Elements ().Where (ele => ele.Name.LocalName.Equals ("SHORT-NAME")).FirstOrDefault ().Value = value;
             }
         }
-        public IEnumerable<ElementBase> Elements => AR_PackageArxml.Elements ().Where (ele => ele.Name.LocalName.Equals ("ELEMENTS")).FirstOrDefault ()?.Elements ().Select (ele => new ElementBase () { ArxmlElement = ele, FilePath = FilePath });
-        public IEnumerable<AR_PackageBase> AR_Packages => AR_PackageArxml.Elements ().Where (ele => ele.Name.LocalName.Equals ("AR-PACKAGES")).FirstOrDefault ()?.Elements ().Select (ele => new AR_PackageBase () { AR_PackageArxml = ele, FilePath = FilePath, Path = Path + "/" + PackageName });
+        public IEnumerable<ElementBase> Elements => AR_PackageArxml.Elements ().Where (ele => ele.Name.LocalName.Equals ("ELEMENTS")).FirstOrDefault ()?.Elements ().Select (ele => new ElementBase () { ArxmlElement = ele, FilePath = FilePath, Path = Path + @"/" + PackageName });
+        public IEnumerable<AR_PackageBase> AR_Packages => AR_PackageArxml.Elements ().Where (ele => ele.Name.LocalName.Equals ("AR-PACKAGES")).FirstOrDefault ()?.Elements ().Select (ele => new AR_PackageBase () { AR_PackageArxml = ele, FilePath = FilePath, Path = Path + @"/" + PackageName });
     }
 }

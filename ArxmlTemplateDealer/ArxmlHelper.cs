@@ -2,13 +2,18 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text.RegularExpressions;
+using ArxmlFormater.AR_PackageHelper;
 using ArxmlFormater.ElementHelper;
 using Newtonsoft.Json.Linq;
 namespace ArxmlTemplateDealer
 {
     public class ArxmlHelper
     {
-        public static void ConfigureParametersByTemplate (IEnumerable<IHasParameters> elementsList, JObject templateConfigure, IParameterTemplateDealer parameterTemplateDealer)
+        public static void SearchingDefinitionByPath (IEnumerable<AR_PackageBase> elementsList, string Path)
+        {
+
+        }
+        public static void ConfigureParametersByTemplate (IEnumerable<IHasParameters> elementsList, IEnumerable<ElementBase> elementCollection, JObject templateConfigure, IParameterTemplateDealer parameterTemplateDealer)
         {
             foreach (var templateItem in templateConfigure)
             {
@@ -18,7 +23,9 @@ namespace ArxmlTemplateDealer
                     //if cannot searching the items ,try to search the master container‘s parameter define
                     if (parameterItem == null)
                     {
-
+                        //查询element 的定义信息
+                        string path = (element as ISupportDefinitionRefElement).DefinitionRef;
+                        elementCollection.Where (element => Regex.IsMatch (element.Path, path));
                     }
                 }
 

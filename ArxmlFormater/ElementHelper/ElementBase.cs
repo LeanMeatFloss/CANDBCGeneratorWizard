@@ -7,6 +7,7 @@ namespace ArxmlFormater.ElementHelper
     {
         public XElement ArxmlElement { get; set; }
         public string FilePath { get; set; }
+        public string Path { get; set; }
         public XElement NewElement (string Name)
         {
             return new XElement (XName.Get (Name, ArxmlElement.Name.NamespaceName));
@@ -67,7 +68,7 @@ namespace ArxmlFormater.ElementHelper
         }
         IEnumerable<ElementBase> IHasContainersElement.Containers
         {
-            get => ArxmlElement.Elements ().Where (ele => ele.Name.LocalName.Equals ("CONTAINERS")).FirstOrDefault ()?.Elements ().Select (ele => new ElementBase () { ArxmlElement = ele, FilePath = FilePath });
+            get => ArxmlElement.Elements ().Where (ele => ele.Name.LocalName.Equals ("CONTAINERS")).FirstOrDefault ()?.Elements ().Select (ele => new ElementBase () { ArxmlElement = ele, FilePath = FilePath, Path = Path + @"/" + ElementName });
 
         }
         void IHasContainersElement.AddContainers (params ElementBase[] Containers)
@@ -80,7 +81,7 @@ namespace ArxmlFormater.ElementHelper
         }
         IEnumerable<ElementBase> IHasSubContainers.SubContainers
         {
-            get => ArxmlElement.Elements ().Where (ele => ele.Name.LocalName.Equals ("SUB-CONTAINERS")).FirstOrDefault ()?.Elements ().Select (ele => new ElementBase () { ArxmlElement = ele, FilePath = FilePath });
+            get => ArxmlElement.Elements ().Where (ele => ele.Name.LocalName.Equals ("SUB-CONTAINERS")).FirstOrDefault ()?.Elements ().Select (ele => new ElementBase () { ArxmlElement = ele, FilePath = FilePath, Path = Path + @"/" + ElementName });
 
         }
         void IHasSubContainers.AddSubContainers (params ElementBase[] Containers)
@@ -93,7 +94,7 @@ namespace ArxmlFormater.ElementHelper
         }
         IEnumerable<ISupportParameterElement> IHasParameters.Parameters
         {
-            get => ArxmlElement.Elements ().Where (ele => ele.Name.LocalName.Equals ("PARAMETER-VALUES")).FirstOrDefault ()?.Elements ().Select (ele => new ElementBase () { ArxmlElement = ele, FilePath = FilePath });
+            get => ArxmlElement.Elements ().Where (ele => ele.Name.LocalName.Equals ("PARAMETER-VALUES")).FirstOrDefault ()?.Elements ().Select (ele => new ElementBase () { ArxmlElement = ele, FilePath = FilePath, Path = Path + @"/" + ElementName });
 
         }
         void IHasParameters.AddParameters (params ISupportParameterElement[] Parameters)
