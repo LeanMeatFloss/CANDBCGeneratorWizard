@@ -3,7 +3,7 @@ using System.Collections.Generic;
 
 namespace DBCParser
 {
-    public class SignalItem
+    public class SignalItem : ISupportAttributesDBCItem
     {
         public string SignalName { get; set; }
         public uint SignalSize { get; set; }
@@ -29,6 +29,7 @@ namespace DBCParser
         public List<string> Receiver { get; set; }
         public Dictionary<float, string> ValueTable { get; set; }
         public string Comment { get; set; }
-        public Dictionary<string, string> AppendAttribute { get; set; }
+        public Dictionary<string, string> AttributesDict { get; set; } = new Dictionary<string, string> ();
+        public const string TypeHead = "SG_";
     }
 }

@@ -47,7 +47,7 @@ namespace ArxmlFormater.AR_PackageHelper
         }
         public string FilePath { get; set; }
         public XElement AR_PackageArxml { get; set; }
-        public string Path { get; set; } = "/";
+        public string Path { get; set; } = "";
         public string PackageName
         {
             get => AR_PackageArxml.Elements ().Where (ele => ele.Name.LocalName.Equals ("SHORT-NAME")).FirstOrDefault ()?.Value;

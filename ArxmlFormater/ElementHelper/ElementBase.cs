@@ -3,7 +3,7 @@ using System.Linq;
 using System.Xml.Linq;
 namespace ArxmlFormater.ElementHelper
 {
-    public class ElementBase : ISupportElement, ISupportDefinitionRefElement, ISupportParameterElement, IHasContainersElement, IHasParameters, IHasSubContainers
+    public class ElementBase : IHasParametersDefinitions, ISupportElement, ISupportDefinitionRefElement, ISupportParameterElement, IHasContainersElement, IHasParameters, IHasSubContainers
     {
         public XElement ArxmlElement { get; set; }
         public string FilePath { get; set; }
@@ -95,6 +95,11 @@ namespace ArxmlFormater.ElementHelper
         IEnumerable<ISupportParameterElement> IHasParameters.Parameters
         {
             get => ArxmlElement.Elements ().Where (ele => ele.Name.LocalName.Equals ("PARAMETER-VALUES")).FirstOrDefault ()?.Elements ().Select (ele => new ElementBase () { ArxmlElement = ele, FilePath = FilePath, Path = Path + @"/" + ElementName });
+
+        }
+        IEnumerable<ElementBase> IHasParametersDefinitions.Parameters
+        {
+            get => ArxmlElement.Elements ().Where (ele => ele.Name.LocalName.Equals ("PARAMETERS")).FirstOrDefault ()?.Elements ().Select (ele => new ElementBase () { ArxmlElement = ele, FilePath = FilePath, Path = Path + @"/" + ElementName });
 
         }
         void IHasParameters.AddParameters (params ISupportParameterElement[] Parameters)

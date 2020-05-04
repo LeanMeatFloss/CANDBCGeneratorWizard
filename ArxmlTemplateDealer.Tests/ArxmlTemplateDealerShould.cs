@@ -6,12 +6,15 @@ using System.Xml.Linq;
 using ArxmlFormater.AR_PackageHelper;
 using ArxmlFormater.ElementHelper;
 using ArxmlTemplateDealer.ComStack;
+using DBCParser;
+using NetCoreSystemEnvHelper;
 using ProjectHelper;
 using Xunit;
 namespace ArxmlTemplateDealer.Tests
 {
     public class ArxmlTemplateDealerShould
     {
+        string DBCText = File.ReadAllText (FileSysHelper.GetCurrentAppLocationPath () + "\\Resources\\ArxmlTemplateDealer.TestsResources\\dbcForTest.dbc");
         [Fact]
         public void ConfigureParametersByTemplateTest ()
         {
@@ -35,7 +38,8 @@ namespace ArxmlTemplateDealer.Tests
             {
                 AR_PackageBase.GetAllARPackagesAndElements (item, packageList, elementList);
             }
-            ComStackParametersDealer.ConfigureArxmlUsingDBCFiles (null, elementList);
+
+            ComStackParametersDealer.ConfigureArxmlUsingDBCFiles (DBCFileParser.ParserNodes (DBCText).Where (elementList => elementList.NodeName.Equals ("ED")).First (), elementList);
             //ComStackParametersDealer.ConfigureArxmlUsingDBCFiles()
             Assert.Equal (10, pathAll.Length);
         }

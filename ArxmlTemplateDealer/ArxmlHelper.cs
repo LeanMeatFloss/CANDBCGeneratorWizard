@@ -1,10 +1,12 @@
 using System;
 using System.Collections.Generic;
+using System.Data;
 using System.IO;
 using System.Linq;
 using System.Text.RegularExpressions;
 using ArxmlFormater.AR_PackageHelper;
 using ArxmlFormater.ElementHelper;
+using NetCoreSystemEnvHelper;
 using Newtonsoft.Json.Linq;
 namespace ArxmlTemplateDealer
 {
@@ -24,7 +26,6 @@ namespace ArxmlTemplateDealer
                             filteredItem.Add (element);
                         }
 
-                        return;
                     }
                     var containers = (element as IHasContainersElement).Containers;
                     if (containers != null)
@@ -35,6 +36,11 @@ namespace ArxmlTemplateDealer
                     if (subContainers != null)
                     {
                         searchingParametersDefinitions (subContainers, path, filteredItem);
+                    }
+                    var parameters = (element as IHasParametersDefinitions).Parameters;
+                    if (parameters != null)
+                    {
+                        searchingParametersDefinitions (parameters, path, filteredItem);
                     }
 
                 }
@@ -60,47 +66,49 @@ namespace ArxmlTemplateDealer
                         //searching element parameter fixed with name
                         foreach (var container in parametersDefinitionCollection)
                         {
-                            if ((container as IHasParameters).Parameters == null)
-                            {
-                                continue;
-                            }
-                            foreach (var parameter in (container as IHasParameters).Parameters)
-                            {
-                                //parameter checking,
-                                if (Regex.IsMatch (parameter.Path, templateItem.Key, RegexOptions.Multiline))
-                                {
-                                    //find it, try to add it!
-                                    //first get type name
-                                    string typeName = parameter.ElementType;
-                                    var ele = element.NewElement (typeName);
-                                    string definitionType = Regex.Replace (typeName, "(-INTEGER-|-FLOAT-)", "-NUMERICAL-");
-                                    definitionType = Regex.Replace (definitionType, "(-ENUMERATION-|-FUNCTION-)", "-TEXTUAL-");
-                                    definitionType = Regex.Replace (definitionType, "-DEF$", "-VALUE", RegexOptions.Multiline);
-                                    (ele as ISupportDefinitionRefElement).ElementType = definitionType;
-                                    (ele as ISupportDefinitionRefElement).DefinitionType = typeName;
-                                    (ele as ISupportDefinitionRefElement).DefinitionRef = parameter.Path + @"\" + parameter.ElementName;
-                                    element.AddParameters (ele as ISupportParameterElement);
-                                    parameterItem = element.Parameters.Where (parameter => Regex.IsMatch (parameter.DefinitionRef, templateItem.Key, RegexOptions.Multiline)).FirstOrDefault ();
-                                    break;
-                                }
 
+                            //parameter checking,
+                            if (Regex.IsMatch (container.ElementName, templateItem.Key, RegexOptions.Multiline))
+                            {
+                                //find it, try to add it!
+                                //first get type name
+                                string typeName = container.ElementType;
+
+                                string definitionType = Regex.Replace (typeName, "(-INTEGER-|-FLOAT-)", "-NUMERICAL-");
+                                definitionType = Regex.Replace (definitionType, "(-ENUMERATION-|-FUNCTION-)", "-TEXTUAL-");
+                                definitionType = Regex.Replace (definitionType, "-DEF$", "-VALUE", RegexOptions.Multiline);
+                                var ele = element.NewElement (definitionType);
+                                var elementBase = new ElementBase () { ArxmlElement = ele };
+                                //(elementBase as ISupportDefinitionRefElement).ElementType = definitionType;
+                                (elementBase as ISupportDefinitionRefElement).DefinitionType = typeName;
+                                (elementBase as ISupportDefinitionRefElement).DefinitionRef = container.Path + @"/" + container.ElementName;
+                                element.AddParameters (elementBase as ISupportParameterElement);
+                                parameterItem = element.Parameters.Where (parameter => Regex.IsMatch (parameter.DefinitionRef, templateItem.Key, RegexOptions.Multiline)).FirstOrDefault ();
+                                break;
                             }
+
                         }
                     }
                     parameterTemplateDealer (element as ElementBase, parameterItem, templateItem.Value);
+                    if (parameterItem.ElementType.Contains ("NUMERICAL") && !parameterItem.DefinitionType.Contains ("BOOLEAN"))
+                    {
+                        parameterItem.Value = (new DataTable ()).Compute (parameterItem.Value, null).ToString ();
+                    }
                 }
 
             }
         }
-        static JObject ReflectJObject = JObject.Parse (File.ReadAllText ())
+        static JObject ReflectJObject = JObject.Parse (File.ReadAllText ((FileSysHelper.GetCurrentAppLocationPath () + @"\Resources\ArxmlFormaterResources\ECUcDefaultConfigure.json")));
         public static string DefaultParametersParser (ElementBase parameterContainer, ISupportParameterElement parameter, string template)
         {
             string matchPattern = @"\{___ARXML__\.([\S]*?)\}";
             foreach (Match match in Regex.Matches (template, matchPattern))
             {
                 string refTarget = match.Groups[1].Value;
-                parameterContainer.GetType ().GetProperty (refTarget)
+                string value = parameterContainer.GetType ().GetProperty (ReflectJObject.Value<string> ("refTarget")).GetValue (parameterContainer) as string;
+                template.Replace (match.Value, value);
             }
+            return template;
         }
         public static IList<ElementBase> SearchingElementsByConfigure (JObject configure, IList<ElementBase> elementList)
         {

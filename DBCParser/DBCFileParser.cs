@@ -10,12 +10,36 @@ namespace DBCParser
         {
             var nodeList = GetNodes (dbcText);
             var messageList = ParserMessageBlocks (dbcText);
-            return nodeList.Select (node => new NodeItem () { NodeName = node }).Select (node =>
+            var res = nodeList.Select (node => new NodeItem () { NodeName = node }).Select (node =>
             {
                 node.TransimitMessages = messageList.Where (message => message.Transmitter.Equals (node.NodeName)).ToList ();
                 node.ReceiveMessages = messageList.Where (message => message.SignalList.Where (signal => signal.Receiver.Contains (node.NodeName)).Count () != 0).ToList ();
                 return node;
             }).ToList ();
+            ReadCommentsAndAttributes (res, dbcText);
+            return res;
+        }
+        internal static void ReadCommentsAndAttributes (IList<NodeItem> NodeList, string dbcText)
+        {
+            //^BA_[\s]*"([\S]*?)"[\s]*([a-zA-Z]*?_)([\S \t]*?)*;$
+            string attributePattern = @"^BA_[\s]*" + "\"([\\S]*?)\"[\\s]*([a-zA-Z]*?_)[\\s]*([\\S]+)[\\s]+([\\S]+)[\\s]*;[\\s]$"; //1->type,2->attributeName,3->target and value(split by )
+            foreach (Match match in Regex.Matches (dbcText, attributePattern, RegexOptions.Multiline))
+            {
+                switch (match.Groups[2].Value)
+                {
+                    case NodeItem.TypeHead:
+                        NodeList.Where (ele => ele.NodeName.Equals (match.Groups[3].Value)).FirstOrDefault ().AttributesDict[match.Groups[1].Value] = match.Groups[4].Value;
+                        break;
+                    case MessageItem.TypeHead:
+                        NodeList.SelectMany (node => node.ReceiveMessages.Concat (node.TransimitMessages)).Distinct ().Where (ele => ele.MessageId == uint.Parse (match.Groups[3].Value)).FirstOrDefault ().AttributesDict[match.Groups[1].Value] = match.Groups[4].Value;
+                        break;
+                    case SignalItem.TypeHead:
+                        NodeList.SelectMany (node => node.ReceiveMessages.Concat (node.TransimitMessages)).Distinct ().SelectMany (message => message.SignalList).Where (ele => ele.SignalName.Equals (match.Groups[3].Value)).FirstOrDefault ().AttributesDict[match.Groups[1].Value] = match.Groups[4].Value;
+                        break;
+                }
+
+            }
+
         }
         internal static IList<MessageItem> ParserMessageBlocks (string dbcText)
         {

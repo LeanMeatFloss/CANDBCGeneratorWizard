@@ -1,4 +1,7 @@
 {
+    "DBCAttributesReflectDict": {
+        "__TRANSFER_TIME_LOOP__": "GenMsgCycleTime"
+    },
     "ComStack": {
         "Template": [
             {
@@ -16,10 +19,10 @@
                         "__RX__": "PENDING"
                     },
                     "^[\\S]*ComFirstTimeout$": {
-                        "__RX__": "{__TRANSFER_TIME_LOOP__}*10"
+                        "__RX__": "{__DBC__.__TRANSFER_TIME_LOOP__}*10/1000"
                     },
                     "^[\\S]*ComTimeout$": {
-                        "__RX__": "{__TRANSFER_TIME_LOOP__}*10"
+                        "__RX__": "{__DBC__.__TRANSFER_TIME_LOOP__}*10/1000"
                     },
                     "^[\\S]*ComNotification$": {
                         "__RX__": "Rte_COMCbk_{__ARXML__.__SHORT_NAME__}"

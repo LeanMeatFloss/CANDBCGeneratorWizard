@@ -1,0 +1,215 @@
+VERSION ""
+
+
+NS_ : 
+	NS_DESC_
+	CM_
+	BA_DEF_
+	BA_
+	VAL_
+	CAT_DEF_
+	CAT_
+	FILTER
+	BA_DEF_DEF_
+	EV_DATA_
+	ENVVAR_DATA_
+	SGTYPE_
+	SGTYPE_VAL_
+	BA_DEF_SGTYPE_
+	BA_SGTYPE_
+	SIG_TYPE_REF_
+	VAL_TABLE_
+	SIG_GROUP_
+	SIG_VALTYPE_
+	SIGTYPE_VALTYPE_
+	BO_TX_BU_
+	BA_DEF_REL_
+	BA_REL_
+	BA_DEF_DEF_REL_
+	BU_SG_REL_
+	BU_EV_REL_
+	BU_BO_REL_
+	SG_MUL_VAL_
+
+BS_:
+
+BU_: BMS EMS ED
+VAL_TABLE_ PT_Crash_table 1 "deployed crash" 0 "no crash" ;
+VAL_TABLE_ Pt_stIgnSwt_table 5 "IGN_START (BRM on)" 4 "IGN_ON (BRM on)" 2 "IGN_ACC (BRM on)" 1 "IGN_OFF (BRM off)" 0 "IGN_LOCK (BRM off)" ;
+VAL_TABLE_ Pt_stOperModDesEdrv_table 6 "Reserved (ESA mode) " 4 "Voltage mode" 1 "Torque mode" 0 " Idle" ;
+VAL_TABLE_ Eem_stRlyMvbEdrv_table 3 "Precharge" 2 "Open" 1 "Opening request" 0 "Closed" ;
+VAL_TABLE_ Edrv_stStrtPsbl_table 2 "Start Not Possible" 1 "Start Critical" 0 "Start Possible" ;
+VAL_TABLE_ Edrv_flgMilReqd_table 1 " Active" 0 "Inactive" ;
+VAL_TABLE_ Edrv_stActDern_table 7 "Reserved" 6 "Derating: motor temperature" 5 "Derating: inverter limitation" 4 "Reserved" 3 "Derating: torque limitation" 2 "Derating: DC current limitation" 1 "Derating: DC voltage limitation" 0 "No derating" ;
+VAL_TABLE_ Edrv_stOperModAct_table 15 "Failure" 14 "Standby" 13 "Free" 12 "Reserved" 11 "Reserved" 10 "Reserved" 9 "Reserved" 8 "Free" 7 "Free" 6 "Free" 5 "Reserved" 4 "Voltage" 3 "Reserved" 2 "Free" 1 "Torque" 0 "Idle" ;
+VAL_TABLE_ Edrv_stRunAct_table 3 "Post-Run finished" 2 "Post-Run" 1 "Run (Idle, Torque, ...)" 0 "Pre-Run" ;
+
+
+BO_ 16 Pt_Veh_1: 8 EMS
+ SG_ Pt_tiEdrvShOff : 50|12@1+ (1,0) [0|4095] "min"  ED
+ SG_ Pt_tAmbEdrv : 42|8@1+ (1,-40) [-40|215] "deg_C"  ED
+ SG_ Pt_vVeh : 30|12@1+ (0.1,0) [0|409.5] "kilometerPerHour"  ED
+ SG_ Pt_nEng : 16|14@1+ (1,0) [0|16383] "rpm"  ED
+ SG_ Pt_stIgnSwt : 12|3@1+ (1,0) [0|7] ""  ED
+ SG_ Pt_nrAlvCntrIgn : 8|4@1+ (1,0) [0|15] ""  ED
+ SG_ Pt_nrChksIgn : 0|8@1+ (1,0) [0|255] ""  ED
+
+BO_ 1 Pt_Edrv_Des_1: 8 EMS
+ SG_ PT_Crash : 52|1@1+ (1,0) [0|1] ""  BMS,ED
+ SG_ Pt_tqMaxEdrv : 40|12@1+ (0.1,-200) [-200|209.5] "Nm"  BMS,ED
+ SG_ Pt_tqMinEdrv : 28|12@1+ (0.1,-200) [-200|209.5] "Nm"  BMS,ED
+ SG_ Pt_tqDesEdrv : 16|12@1+ (0.1,-200) [-200|209.5] "Nm"  BMS,ED
+ SG_ Pt_stOperModDesEdrv : 12|4@1+ (1,0) [0|15] ""  BMS,ED
+ SG_ Pt_nrAlvCntrAct : 8|4@1+ (1,0) [0|15] ""  BMS,ED
+ SG_ Pt_nrChksAct : 0|8@1+ (1,0) [0|255] ""  BMS,ED
+
+BO_ 13 Eem_Edrv_Lim_1: 8 EMS
+ SG_ Eem_iMinEdrv : 50|10@1+ (1,-1000) [-1000|23] "A"  ED
+ SG_ Eem_iMaxEdrv : 40|10@1+ (1,0) [0|1023] "A"  ED
+ SG_ Eem_rMvbEdrv : 20|10@1+ (0.001,0) [0|1.023] "Ohm"  ED
+ SG_ Eem_uMinEdrv : 10|10@1+ (0.0625,0) [0|63.9375] "V"  ED
+ SG_ Eem_uMaxEdrv : 0|10@1+ (0.0625,0) [0|63.9375] "V"  ED
+
+BO_ 11 Eem_Edrv_Des_1: 8 EMS
+ SG_ Pt_dstOdo : 24|24@1+ (1,0) [0|0] ""  ED
+ SG_ Eem_stRlyMvbEdrv : 22|2@1+ (1,0) [0|3] ""  ED
+ SG_ Eem_uDesEdrv : 12|10@1+ (0.0625,0) [0|63.9375] "V"  ED
+ SG_ Eem_nrChksAct : 0|8@1+ (1,0) [0|255] ""  ED
+ SG_ Eem_nrAlvCntrAct : 8|4@1+ (1,0) [0|15] ""  ED
+
+BO_ 4 Edrv_Req_1: 8 ED
+ SG_ Edrv_stStrtPsbl : 46|2@1+ (1,0) [0|3] ""  EMS
+ SG_ Edrv_ratTCritIvtr : 40|6@1+ (2,0) [0|126] "perc"  EMS
+ SG_ Edrv_ratTCritMac : 34|6@1+ (2,0) [0|126] "perc"  EMS
+ SG_ Edrv_flgMilReqd : 33|1@1+ (1,0) [0|1] ""  EMS
+
+BO_ 6 Edrv_Pred_1: 8 ED
+ SG_ Edrv_stActDern : 60|4@1+ (1,0) [0|15] ""  EMS
+ SG_ Edrv_tqMinAvl : 48|12@1+ (0.1,-200) [-200|209.5] "Nm"  EMS
+ SG_ Edrv_tqMaxAvl : 24|12@1+ (0.1,-200) [-200|209.5] "Nm"  EMS
+ SG_ Edrv_nrAlvCntrLim : 8|4@1+ (1,0) [0|15] ""  EMS
+ SG_ Edrv_nrChksLim : 0|8@1+ (1,0) [0|255] ""  EMS
+
+BO_ 2 Edrv_Act_1: 8 ED
+ SG_ Edrv_iAct : 54|10@1+ (1,-500) [-500|523] "A"  EMS
+ SG_ Edrv_uAct : 44|10@1+ (0.0625,0) [0|63.9375] "V"  EMS
+ SG_ Edrv_nAct : 30|13@1+ (6,-24000) [-24000|25146] "rpm"  EMS
+ SG_ Edrv_tqAct : 18|12@1+ (0.1,-200) [-200|209.5] "Nm"  EMS
+ SG_ Edrv_stOperModAct : 14|4@1+ (1,0) [0|15] ""  EMS
+ SG_ Edrv_stRunAct : 12|2@1+ (1,0) [0|3] ""  EMS
+ SG_ Edrv_nrAlvCntrAct : 8|4@1+ (1,0) [0|15] ""  EMS
+ SG_ Edrv_nrChksAct : 0|8@1+ (1,0) [0|255] ""  EMS
+
+
+
+CM_ SG_ 16 Pt_tiEdrvShOff "Shutoff time of BRM.";
+CM_ SG_ 16 Pt_tAmbEdrv "Ambient temperature. ";
+CM_ SG_ 16 Pt_vVeh "Vehicle speed.";
+CM_ SG_ 16 Pt_nEng "Engine speed.";
+CM_ SG_ 16 Pt_stIgnSwt "Ignition switch. This signal is used to control BRM run state:
+0x0: IGN_LOCK (BRM off)
+0x1: IGN_OFF (BRM off)
+0x2: IGN_ACC (BRM on)
+0x4: IGN_ON (BRM on)
+0x5: IGN_START (BRM on)";
+CM_ SG_ 16 Pt_nrAlvCntrIgn "Message counter of the PT message Pt_Veh_1. The counter runs cyclically from 0 to 15 and indicates if the PT microprocessor and the corresponding program are still running.";
+CM_ SG_ 16 Pt_nrChksIgn "Checksum of PT message Pt_Veh_1. With the help of this checksum, receiving control units are able to verify the integrity of data in a message.";
+CM_ SG_ 1 PT_Crash "crash signal from pt";
+CM_ SG_ 1 Pt_tqMaxEdrv "Acceptable maximum BRM torque at BRM shaft (maximum generator torque). This value is considered as maximum allowed torque limitation in all active operation modes.";
+CM_ SG_ 1 Pt_tqMinEdrv "Acceptable minimum BRM torque at BRM shaft (maximum generator torque). This value is considered as minimum allowed torque limitation in all active operation modes.";
+CM_ SG_ 1 Pt_tqDesEdrv "desired torque of ED.Desired or maximum BRM torque at BRM shaft. Desired torque is considered as target value in torque mode.";
+CM_ SG_ 1 Pt_stOperModDesEdrv "Desired BRM operation mode";
+CM_ SG_ 1 Pt_nrAlvCntrAct "Message counter of the PT message Pt_Edrv_Des_1. The counter runs cyclically from 0 to 15 and indicates
+if the PT microprocessor and the corresponding program are still running.";
+CM_ SG_ 1 Pt_nrChksAct "Checksum of PT message Pt_Edrv_Des_1. With the help of this checksum, receiving control units are able
+to verify the integrity of data in a message.";
+CM_ SG_ 13 Eem_iMinEdrv "minimum allowed current limitation from Edrv.
+
+";
+CM_ SG_ 13 Eem_iMaxEdrv "maximum allowed current limitation from Edrv
+Maximum allowed DC current at B+ bolt of the BRM. This limit will be considered as positive current in the
+following operation modes: torque mode, voltage mode, speed mode and start mode.";
+CM_ SG_ 13 Eem_rMvbEdrv "Actual 48V (Medium Voltage) Battery internal resistance. This value is used for BRM voltage limitation.";
+CM_ SG_ 13 Eem_uMinEdrv "Minimum allowed DC voltage between B+ and B- bolt of the BRM. This limit will be considered as minimum";
+CM_ SG_ 13 Eem_uMaxEdrv "Maximum allowed DC voltage between B+ and B- bolt of the BRM. This limit will be considered as maximum
+voltage in the following operation modes: torque mode, speed mode and start mode.";
+CM_ SG_ 11 Eem_stRlyMvbEdrv "Actual state of 48V (Medium Voltage) Battery main relay.
+0: Closed
+1: Opening request
+2: Open
+3: Precharge";
+CM_ SG_ 11 Eem_uDesEdrv "Desired DC voltage for the BRM. This is the setpoint value for the BRM DC voltage, in case the requested
+operation mode (Edrv_stOperModAct) is voltage mode.";
+CM_ SG_ 11 Eem_nrChksAct "Checksum of EEM message Eem_Edrv_Des_1. With the help of this checksum, receiving control units are
+able to verify the integrity of data in a message.";
+CM_ SG_ 11 Eem_nrAlvCntrAct "Alive counter
+Message counter of the EEM message Eem_Edrv_Des_1. The counter runs cyclically from 0 to 15 and
+indicates if the EEM microprocessor and the corresponding program are still running.";
+CM_ SG_ 4 Edrv_stStrtPsbl "Indicates that a start of the combustion engine can be performed in terms of BRM thermal ratio. Electrical
+limits (i.e. current or voltage) are not considered.";
+CM_ SG_ 4 Edrv_ratTCritIvtr "actual temperature state of Edrv Inverter";
+CM_ SG_ 4 Edrv_ratTCritMac "actual temperature state of Edrive Machine:Actual ratio of the BRM electric machine temperature in comparison to the maximum permissible machine
+temperature. ";
+CM_ SG_ 4 Edrv_flgMilReqd "Lamp on request";
+CM_ SG_ 6 Edrv_stActDern "actual active derating in Erdv";
+CM_ SG_ 6 Edrv_tqMinAvl "actual available minimum possible torque";
+CM_ SG_ 6 Edrv_tqMaxAvl "actual available maximum possible torque.Calculated maximum BRM torque based on peak performance and thermal derating of BRM.";
+CM_ SG_ 6 Edrv_nrAlvCntrLim "Rolling Counter:Message counter of the BRM message Edrv_Pred_1. The enumerator counts periodically from 0 to 15 and
+indicates that BRM microprocessor and the corresponding program is still running. The enumerator is calculated every 10 ms.";
+CM_ SG_ 6 Edrv_nrChksLim "Check Sum. With the help of this checksum, receiving control units are
+able to verify the integrity of data in a message.
+
+";
+CM_ SG_ 2 Edrv_iAct "actual (input/output) current of ED 
+Positive sign: current to BRM  
+Negative sign: current from BRM  ";
+CM_ SG_ 2 Edrv_uAct "actual voltage of ED
+Actual measured BRM DC link voltage between B+ and B- bolt.";
+CM_ SG_ 2 Edrv_nAct "actual rotational speed of ED";
+CM_ SG_ 2 Edrv_tqAct "actual torque of ED";
+CM_ SG_ 2 Edrv_stOperModAct "feedback of actual operation mode of ED";
+CM_ SG_ 2 Edrv_stRunAct "Actual BRM run state
+Actual BRM run state
+0x0: Pre-Run
+0x1: Run (Idle, Torque, ...)
+0x2: Post-Run
+0x3: Post-Run finished";
+CM_ SG_ 2 Edrv_nrAlvCntrAct "Message counter of the BRM message Edrv_Act_1. The enumerator counts periodically from 0 to 15 and indicates that BRM microprocessor and the corresponding program is still running. The enumerator is
+calculated every 10 ms.";
+CM_ SG_ 2 Edrv_nrChksAct "Check Sum of ED.With the help of this checksum, receiving control units are
+able to verify the integrity of data in a message.";
+BA_DEF_ BU_  "ILUsed" ENUM  "No","Yes";
+BA_DEF_ BO_  "GenMsgSendType" ENUM  "Cyclic","not_used","not_used","not_used","not_used","not_used","not_used","IfActive","NoMsgSendType";
+BA_DEF_ BO_  "GenMsgCycleTime" INT 0 65535;
+BA_DEF_  "BusType" STRING ;
+BA_DEF_DEF_  "ILUsed" "No";
+BA_DEF_DEF_  "GenMsgSendType" "NoMsgSendType";
+BA_DEF_DEF_  "GenMsgCycleTime" 0;
+BA_DEF_DEF_  "BusType" "CAN";
+BA_ "ILUsed" BU_ BMS 1;
+BA_ "ILUsed" BU_ EMS 1;
+BA_ "ILUsed" BU_ ED 1;
+BA_ "GenMsgCycleTime" BO_ 16 10;
+BA_ "GenMsgSendType" BO_ 16 0;
+BA_ "GenMsgCycleTime" BO_ 1 10;
+BA_ "GenMsgSendType" BO_ 1 0;
+BA_ "GenMsgCycleTime" BO_ 13 10;
+BA_ "GenMsgSendType" BO_ 13 0;
+BA_ "GenMsgCycleTime" BO_ 11 10;
+BA_ "GenMsgSendType" BO_ 11 0;
+BA_ "GenMsgCycleTime" BO_ 4 10;
+BA_ "GenMsgSendType" BO_ 4 0;
+BA_ "GenMsgCycleTime" BO_ 6 10;
+BA_ "GenMsgSendType" BO_ 6 0;
+BA_ "GenMsgCycleTime" BO_ 2 10;
+BA_ "GenMsgSendType" BO_ 2 0;
+VAL_ 16 Pt_stIgnSwt 5 "IGN_START (BRM on)" 4 "IGN_ON (BRM on)" 2 "IGN_ACC (BRM on)" 1 "IGN_OFF (BRM off)" 0 "IGN_LOCK (BRM off)" ;
+VAL_ 1 PT_Crash 1 "deployed crash" 0 "no crash" ;
+VAL_ 1 Pt_stOperModDesEdrv 6 "Reserved (ESA mode) " 4 "Voltage mode" 1 "Torque mode" 0 " Idle" ;
+VAL_ 11 Eem_stRlyMvbEdrv 3 "Precharge" 2 "Open" 1 "Opening request" 0 "Closed" ;
+VAL_ 4 Edrv_stStrtPsbl 2 "Start Not Possible" 1 "Start Critical" 0 "Start Possible" ;
+VAL_ 4 Edrv_flgMilReqd 1 " Active" 0 "Inactive" ;
+VAL_ 6 Edrv_stActDern 7 "Reserved" 6 "Derating: motor temperature" 5 "Derating: inverter limitation" 4 "Reserved" 3 "Derating: torque limitation" 2 "Derating: DC current limitation" 1 "Derating: DC voltage limitation" 0 "No derating" ;
+VAL_ 2 Edrv_stOperModAct 15 "Failure" 14 "Standby" 13 "Free" 12 "Reserved" 11 "Reserved" 10 "Reserved" 9 "Reserved" 8 "Free" 7 "Free" 6 "Free" 5 "Reserved" 4 "Voltage" 3 "Reserved" 2 "Free" 1 "Torque" 0 "Idle" ;
+VAL_ 2 Edrv_stRunAct 3 "Post-Run finished" 2 "Post-Run" 1 "Run (Idle, Torque, ...)" 0 "Pre-Run" ;
+
