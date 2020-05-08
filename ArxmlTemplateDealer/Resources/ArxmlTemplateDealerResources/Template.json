@@ -1,36 +1,42 @@
 {
-    "DBCAttributesReflectDict": {
-        "__TRANSFER_TIME_LOOP__": "GenMsgCycleTime"
-    },
     "ComStack": {
         "Template": [
             {
                 "SearchingElement": {
-                    "SHORT-NAME": "Com"
+                    "DEFINITION": "^[\\S]*\\\\Com"
                 },
                 "SearchingContainer": {
-                    "SHORT-NAME": "ComConfig"
+                    "DEFINITION": "^[\\S]*\\\\ComConfig"
                 },
-                "SearchingSubContainer": {
-                    "DEFINITION-REF": "^[\\S]*ComSignal$"
-                },
+                "SearchingSubContainerRoute": [
+                    {
+                        "DEFINITION": "^[\\S]*\\\\ComSignal$"
+                    }
+                ],
                 "ParametersTemplate": {
-                    "^[\\S]*ComTransferProperty$": {
-                        "__RX__": "PENDING"
-                    },
+                    "^[\\S]*ComSignalInitValue$": "({__DBC__.SIGNAL.InitialValue}-({__DBC__.SIGNAL.Offset}))/{__DBC__.SIGNAL.Factor}",
+                    "^[\\S]*ComErrorNotification$": null,
                     "^[\\S]*ComFirstTimeout$": {
-                        "__RX__": "{__DBC__.__TRANSFER_TIME_LOOP__}*10/1000"
+                        "__RX__": "{__DBC__.MESSAGE.GenMsgCycleTime}*10/1000",
+                        "__TX__": null
+                    },
+                    "^[\\S]*ComTransferProperty$": "PENDING",
+                    "^[\\S]*ComNotification$": {
+                        "__RX__": "Rte_COMCbk_{__ARXML__.__SHORT_NAME__}",
+                        "__TX__": null
+                    },
+                    "^[\\S]*ComRxDataTimeoutAction$": {
+                        "__RX__": "REPLACE",
+                        "__TX__": null
                     },
                     "^[\\S]*ComTimeout$": {
-                        "__RX__": "{__DBC__.__TRANSFER_TIME_LOOP__}*10/1000"
-                    },
-                    "^[\\S]*ComNotification$": {
-                        "__RX__": "Rte_COMCbk_{__ARXML__.__SHORT_NAME__}"
+                        "__RX__": "{__DBC__.MESSAGE.GenMsgCycleTime}*30/1000",
+                        "__TX__": null
                     },
                     "^[\\S]*ComTimeoutNotification$": {
                         "__RX__": "Rte_ComCbkTOut_{__ARXML__.__SHORT_NAME__}"
                     },
-                    "^[\\S]*ComErrorNotification$": null
+                    "^[\\S]*ComUpdateBitPosition$": null
                 }
             }
         ]

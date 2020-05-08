@@ -110,6 +110,16 @@ namespace ArxmlFormater.ElementHelper
             }
             ArxmlElement.Elements ().Where (ele => ele.Name.LocalName.Equals ("PARAMETER-VALUES")).FirstOrDefault ().Add (Parameters.Select (ele => ele.ArxmlElement));
         }
+        void IHasParameters.RemoveParameters (params ISupportDefinitionRefElement[] Parameters)
+        {
+            foreach (var parameter in Parameters)
+            {
+                if (parameter.ArxmlElement.Parent != null)
+                {
+                    parameter.ArxmlElement.Remove ();
+                }
+            }
+        }
 
     }
 }

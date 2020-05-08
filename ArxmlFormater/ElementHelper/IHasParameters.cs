@@ -6,5 +6,6 @@ namespace ArxmlFormater.ElementHelper
     {
         IEnumerable<ISupportParameterElement> Parameters { get; }
         void AddParameters (params ISupportParameterElement[] Parameters);
+        void RemoveParameters (params ISupportDefinitionRefElement[] Parameters);
     }
 }

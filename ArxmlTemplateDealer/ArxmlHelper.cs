@@ -13,7 +13,7 @@ namespace ArxmlTemplateDealer
     public class ArxmlHelper
     {
 
-        public static IList<ElementBase> SearchingParametersDefinitionByPath (IEnumerable<ElementBase> elementsList, string path)
+        public static IList<ElementBase> SearchingElementsDefinitionByPath (IEnumerable<ElementBase> elementsList, string path)
         {
             void searchingParametersDefinitions (IEnumerable<ElementBase> elementsList, string path, List<ElementBase> filteredItem)
             {
@@ -50,6 +50,47 @@ namespace ArxmlTemplateDealer
             searchingParametersDefinitions (elementsList, path, filteredItem);
             return filteredItem;
         }
+        public delegate void AddElementDelegate (params ElementBase[] elements);
+        static JObject ElementTypeJDict = JObject.Parse (File.ReadAllText ((FileSysHelper.GetCurrentAppLocationPath () + @"\Resources\ArxmlTemplateDealerResources\ElementType.json")));
+        public static void IHasContainersTemplateDealer (ElementBase container, IEnumerable<ElementBase> containerElements, IEnumerable<ElementBase> elementsCollection, JObject template, AddElementDelegate addElementFunc, Func<ElementBase, string, IEnumerable<string>> nameListFunc)
+        {
+            //Searching elements that fixed the template
+            List<string> nameList = nameListFunc (container, template.Value<string> ("ElementName")).ToList ();
+            //Searching elements that contains the definitions
+            var elementsDefinitionCollection = SearchingElementsDefinitionByPath (elementsCollection, (container as ISupportDefinitionRefElement).DefinitionRef);
+
+            ElementBase elementDefinition = elementsDefinitionCollection.Where (ele => Regex.IsMatch (ele.Path + "\\" + ele.ElementName, template.Value<string> ("DEFINITION"), RegexOptions.Multiline)).FirstOrDefault ();
+            string elementType = elementDefinition.ElementType;
+            foreach (var subJToken in ElementTypeJDict)
+            {
+                if ((subJToken.Value as JArray).Contains (elementType))
+                {
+                    elementType = subJToken.Key;
+                    break;
+                }
+            }
+            foreach (var name in nameList)
+            {
+                var containerElement = containerElements.Where (ele => ele.ElementName.Equals (name)).FirstOrDefault ();
+                if (containerElement == null)
+                {
+                    //try to add an element
+
+                    var ele = container.NewElement (elementType);
+                    var elementBase = new ElementBase () { ArxmlElement = ele };
+                    (elementBase as ISupportDefinitionRefElement).DefinitionRef = elementDefinition.Path + "\\" + elementDefinition.ElementName;
+                    (elementBase as ISupportDefinitionRefElement).DefinitionType = elementDefinition.ElementType;
+                    addElementFunc (elementBase);
+                    containerElement = containerElements.Where (ele => ele.ElementName.Equals (name)).FirstOrDefault ();
+                }
+                else
+                {
+                    (containerElement as ISupportDefinitionRefElement).DefinitionRef = elementDefinition.Path + "\\" + elementDefinition.ElementName;
+                    (containerElement as ISupportDefinitionRefElement).DefinitionType = elementDefinition.ElementType;
+                }
+            }
+
+        }
         public static void ConfigureParametersByTemplate (IEnumerable<IHasParameters> elementsList, IEnumerable<ElementBase> elementsCollection, JObject templateConfigure, IParameterTemplateDealer parameterTemplateDealer)
         {
             foreach (var templateItem in templateConfigure)
@@ -62,7 +103,7 @@ namespace ArxmlTemplateDealer
                     {
                         //searching element parameters definitions
                         string path = (element as ISupportDefinitionRefElement).DefinitionRef;
-                        var parametersDefinitionCollection = SearchingParametersDefinitionByPath (elementsCollection, path);
+                        var parametersDefinitionCollection = SearchingElementsDefinitionByPath (elementsCollection, path);
                         //searching element parameter fixed with name
                         foreach (var container in parametersDefinitionCollection)
                         {
@@ -75,7 +116,7 @@ namespace ArxmlTemplateDealer
                                 string typeName = container.ElementType;
 
                                 string definitionType = Regex.Replace (typeName, "(-INTEGER-|-FLOAT-)", "-NUMERICAL-");
-                                definitionType = Regex.Replace (definitionType, "(-ENUMERATION-|-FUNCTION-)", "-TEXTUAL-");
+                                definitionType = Regex.Replace (definitionType, "(-ENUMERATION-PARAM-|-FUNCTION-NAME-)", "-TEXTUAL-PARAM-");
                                 definitionType = Regex.Replace (definitionType, "-DEF$", "-VALUE", RegexOptions.Multiline);
                                 var ele = element.NewElement (definitionType);
                                 var elementBase = new ElementBase () { ArxmlElement = ele };
@@ -89,29 +130,32 @@ namespace ArxmlTemplateDealer
 
                         }
                     }
+
                     parameterTemplateDealer (element as ElementBase, parameterItem, templateItem.Value);
                     if (parameterItem.ElementType.Contains ("NUMERICAL") && !parameterItem.DefinitionType.Contains ("BOOLEAN"))
                     {
                         parameterItem.Value = (new DataTable ()).Compute (parameterItem.Value, null).ToString ();
                     }
-                }
+                    if (string.IsNullOrEmpty (parameterItem.Value)) { element.RemoveParameters (parameterItem); }
 
+                }
             }
         }
-        static JObject ReflectJObject = JObject.Parse (File.ReadAllText ((FileSysHelper.GetCurrentAppLocationPath () + @"\Resources\ArxmlFormaterResources\ECUcDefaultConfigure.json")));
+        static JObject ReflectJObject = JObject.Parse (File.ReadAllText ((FileSysHelper.GetCurrentAppLocationPath () + @"\Resources\ArxmlTemplateDealerResources\Reflect.json")));
         public static string DefaultParametersParser (ElementBase parameterContainer, ISupportParameterElement parameter, string template)
         {
-            string matchPattern = @"\{___ARXML__\.([\S]*?)\}";
+            string matchPattern = @"\{__ARXML__\.([\S]*?)\}";
             foreach (Match match in Regex.Matches (template, matchPattern))
             {
                 string refTarget = match.Groups[1].Value;
-                string value = parameterContainer.GetType ().GetProperty (ReflectJObject.Value<string> ("refTarget")).GetValue (parameterContainer) as string;
-                template.Replace (match.Value, value);
+                string value = parameterContainer.GetType ().GetProperty (ReflectJObject.Value<string> (refTarget)).GetValue (parameterContainer) as string;
+                template = template.Replace (match.Value, value);
             }
             return template;
         }
         public static IList<ElementBase> SearchingElementsByConfigure (JObject configure, IList<ElementBase> elementList)
         {
+
             IEnumerable<ElementBase> result = elementList;
             if (configure.ContainsKey ("SearchingElement"))
             {
@@ -122,10 +166,13 @@ namespace ArxmlTemplateDealer
                 result = result.Where (ele => (ele as IHasContainersElement).Containers != null).SelectMany (ele => (ele as IHasContainersElement).Containers);
                 result = SeachingByConfigureDetail (configure.Value<JObject> ("SearchingContainer"), result);
             }
-            if (configure.ContainsKey ("SearchingSubContainer"))
+            if (configure.ContainsKey ("SearchingSubContainerRoute"))
             {
-                result = result.Where (ele => (ele as IHasSubContainers).SubContainers != null).SelectMany (ele => (ele as IHasSubContainers).SubContainers);
-                result = SeachingByConfigureDetail (configure.Value<JObject> ("SearchingSubContainer"), result);
+                foreach (var subContainerSearchTemplate in configure.Value<JArray> ("SearchingSubContainerRoute"))
+                {
+                    result = result.Where (ele => (ele as IHasSubContainers).SubContainers != null).SelectMany (ele => (ele as IHasSubContainers).SubContainers);
+                    result = SeachingByConfigureDetail (subContainerSearchTemplate as JObject, result);
+                }
             }
             return result.ToList ();
         }
@@ -135,9 +182,11 @@ namespace ArxmlTemplateDealer
             {
                 elements = elements.Where (ele => Regex.IsMatch (ele.ElementName?? "", configureDetail.Value<string> ("SHORT-NAME"), RegexOptions.Multiline));
             }
-            if (configureDetail.ContainsKey ("DEFINITION-REF"))
+            //searching in two ways, definition and definition ref
+            if (configureDetail.ContainsKey ("DEFINITION"))
             {
-                elements = elements.Where (ele => Regex.IsMatch ((ele as ISupportDefinitionRefElement).DefinitionRef?? "", configureDetail.Value<string> ("DEFINITION-REF"), RegexOptions.Multiline));
+                //var definitions = (elements.Where (ele => Regex.IsMatch (ele.Path, configureDetail.Value<string> ("DEFINITION"), RegexOptions.Multiline)));
+                elements = elements.Where (ele => Regex.IsMatch ((ele as ISupportDefinitionRefElement).DefinitionRef?? "", configureDetail.Value<string> ("DEFINITION"), RegexOptions.Multiline));
             }
             return elements;
         }

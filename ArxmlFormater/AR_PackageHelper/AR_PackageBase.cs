@@ -19,6 +19,7 @@ namespace ArxmlFormater.AR_PackageHelper
                 return res;
             }
         }
+        public bool IsChanged { get; set; }
 
         public static void GetAllARPackagesAndElements (AR_PackageBase packageSet, IList<AR_PackageBase> packageList, IList<ElementBase> elementList)
         {

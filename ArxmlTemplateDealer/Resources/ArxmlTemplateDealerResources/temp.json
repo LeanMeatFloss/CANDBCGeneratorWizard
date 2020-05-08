@@ -1,0 +1,32 @@
+,
+{
+    "DESC": "Adding ComSignalGroup and name it as MessageName",
+    "SearchingElement": {
+        "DEFINITION": "^[\\S]*\\\\Com$"
+    },
+    "SearchingContainer": {
+        "DEFINITION": "^[\\S]*\\\\ComConfig$"
+    },
+    "SubContainerTemplate": {
+        "DEFINITION": "^[\\S]*\\\\ComSignalGroup$",
+        "ElementName": "{__DBC__.MESSAGES.MessageName}"
+    }
+},
+{
+    "DESC": "Adding ComSignalGroup reference to the SystemTemplate",
+    "SearchingElement": {
+        "DEFINITION": "^[\\S]*\\\\Com$"
+    },
+    "SearchingContainer": {
+        "DEFINITION": "^[\\S]*\\\\ComConfig$"
+    },
+    "SearchingSubContainerRoute": [
+        {
+            "DEFINITION": "^[\\S]*\\\\ComSignalGroup$"
+        }
+    ],
+    "ReferencesTemplate": {
+        "DEFINITION": "^[\\S]*\\\\ComSystemTemplateSystemSignalRef$",
+        "VALUE": "{}"
+    }
+}

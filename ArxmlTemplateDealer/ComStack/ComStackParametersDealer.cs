@@ -26,6 +26,7 @@ namespace ArxmlTemplateDealer.ComStack
 
             //  var list = ArxmlTemplateDealer.ArxmlHelper.SearchingElementsByConfigure (canStackConfigureParametersTemplate, elementList);
         }
+
         static IParameterTemplateDealer CanStackDealerFactory (NodeItem DBCNode)
         {
             void canStackConfigure (ElementBase parametersContainer, ISupportParameterElement parameter, JToken template)
@@ -44,6 +45,10 @@ namespace ArxmlTemplateDealer.ComStack
                     {
                         formaterString = configures.Value<string> ("__TX__");
                     }
+                    else
+                    {
+                        return;
+                    }
 
                 }
                 else if (template is JToken configure)
@@ -61,12 +66,63 @@ namespace ArxmlTemplateDealer.ComStack
                     return;
                 }
                 string returnValue = formaterString;
-                foreach (Match match in Regex.Matches (returnValue, @"\{__DBC__\.([\S]*?)\}"))
+                returnValue = ArxmlHelper.DefaultParametersParser (parametersContainer, parameter, returnValue);
+                foreach (Match match in Regex.Matches (returnValue, @"\{__DBC__\.([\S]*?)\.([\S]*?)\}"))
                 {
+                    string valueReplace = "";
+                    switch (match.Groups[1].Value)
+                    {
+                        case "MESSAGE":
+                            var selectMessage = DBCNode
+                                .ReceiveMessages
+                                .Concat (DBCNode.TransimitMessages)
+                                .Where (message => message.MessageName.Equals (parametersContainer.ElementName) || message.SignalList.Select (signal => signal.SignalName).Contains (parametersContainer.ElementName))
+                                .First ();
+                            if (selectMessage.AttributesDict.ContainsKey (match.Groups[2].Value))
+                            {
+                                valueReplace = selectMessage.AttributesDict[match.Groups[2].Value];
+                            }
+                            else
+                            {
+                                var property = selectMessage.GetType ().GetProperty (match.Groups[2].Value);
+                                valueReplace = property.GetValue (selectMessage).ToString ();
+                            }
+
+                            break;
+                        case "SIGNAL":
+                            var selectSignal = DBCNode
+                                .ReceiveMessages
+                                .Concat (DBCNode.TransimitMessages)
+                                .SelectMany (message => message.SignalList)
+                                .Where (signal => signal.SignalName.Equals (parametersContainer.ElementName))
+                                .First ();
+                            if (selectSignal.AttributesDict.ContainsKey (match.Groups[2].Value))
+                            {
+                                valueReplace = selectSignal.AttributesDict[match.Groups[2].Value];
+                            }
+                            else
+                            {
+                                var property = selectSignal.GetType ().GetProperty (match.Groups[2].Value);
+                                valueReplace = property.GetValue (selectSignal).ToString ();
+                            }
+                            break;
+                        case "NODE":
+                            if (DBCNode.AttributesDict.ContainsKey (match.Groups[2].Value))
+                            {
+                                valueReplace = DBCNode.AttributesDict[match.Groups[2].Value];
+                            }
+                            else
+                            {
+                                var property = DBCNode.GetType ().GetProperty (match.Groups[2].Value);
+                                valueReplace = property.GetValue (DBCNode).ToString ();
+                            }
+                            break;
+                    }
+                    returnValue = returnValue.Replace (match.Value, valueReplace);
 
                 }
-                returnValue = ArxmlHelper.DefaultParametersParser (parametersContainer, parameter, returnValue);
 
+                parameter.Value = returnValue;
             }
             return canStackConfigure;
         }
