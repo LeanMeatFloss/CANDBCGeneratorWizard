@@ -1,11 +1,16 @@
 using System;
 using System.Collections.Generic;
+using System.IO;
 using System.Linq;
 using System.Text.RegularExpressions;
 namespace DBCParser
 {
     public class DBCFileParser
     {
+        public static IList<NodeItem> ParserNodesFromFile (string filePath)
+        {
+            return ParserNodes (File.ReadAllText (filePath));
+        }
         public static IList<NodeItem> ParserNodes (string dbcText)
         {
             var nodeList = GetNodes (dbcText);
@@ -39,6 +44,7 @@ namespace DBCParser
                 }
 
             }
+            string commentPattern = @"^CM_[\s]*" + "([\\S]*?)[\\s]*([0-9]*)[\\s]*([a-zA-Z]*?_)[\\s]*([\\S]+)[\\s]+([\\S]+)[\\s]*;[\\s]$"; //1->type,2->Type,3->framesNum,4->signalName,3->target and value(split by )
 
         }
         internal static IList<MessageItem> ParserMessageBlocks (string dbcText)
