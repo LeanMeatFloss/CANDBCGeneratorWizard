@@ -8,5 +8,6 @@ namespace DBCParser
         public IList<MessageItem> ReceiveMessages { get; set; }
         public Dictionary<string, string> AttributesDict { get; set; } = new Dictionary<string, string> ();
         public const string TypeHead = "BU_";
+        public string Comment { get; set; }
     }
 }

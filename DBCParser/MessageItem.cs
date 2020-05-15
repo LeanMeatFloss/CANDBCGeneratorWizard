@@ -10,5 +10,6 @@ namespace DBCParser
         public IList<SignalItem> SignalList { get; set; }
         public Dictionary<string, string> AttributesDict { get; set; } = new Dictionary<string, string> ();
         public const string TypeHead = "BO_";
+        public string Comment { get; set; }
     }
 }

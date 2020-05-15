@@ -27,7 +27,7 @@ namespace DBCParser
         public float Min { get; set; }
         public string Unit { get; set; }
         public List<string> Receiver { get; set; }
-        public Dictionary<float, string> ValueTable { get; set; }
+        public Dictionary<float, string> ValueTable { get; set; } = new Dictionary<float, string> ();
         public string Comment { get; set; }
         public Dictionary<string, string> AttributesDict { get; set; } = new Dictionary<string, string> ();
         public const string TypeHead = "SG_";

@@ -22,12 +22,13 @@ namespace DBCParser
                 return node;
             }).ToList ();
             ReadCommentsAndAttributes (res, dbcText);
+            ReadValueTableAndAttributeTable (res, dbcText);
             return res;
         }
         internal static void ReadCommentsAndAttributes (IList<NodeItem> NodeList, string dbcText)
         {
             //^BA_[\s]*"([\S]*?)"[\s]*([a-zA-Z]*?_)([\S \t]*?)*;$
-            string attributePattern = @"^BA_[\s]*" + "\"([\\S]*?)\"[\\s]*([a-zA-Z]*?_)[\\s]*([\\S]+)[\\s]+([\\S]+)[\\s]*;[\\s]$"; //1->type,2->attributeName,3->target and value(split by )
+            string attributePattern = @"^BA_[\s]*" + "\"([\\S]*?)\"[\\s]*([a-zA-Z0-9]*?_)[\\s]*([\\S]+)[\\s]+([\\S]+)[\\s]*;[\\s]$"; //1->type,2->attributeName,3->target and value(split by )
             foreach (Match match in Regex.Matches (dbcText, attributePattern, RegexOptions.Multiline))
             {
                 switch (match.Groups[2].Value)
@@ -44,8 +45,36 @@ namespace DBCParser
                 }
 
             }
-            string commentPattern = @"^CM_[\s]*" + "([\\S]*?)[\\s]*([0-9]*)[\\s]*([a-zA-Z]*?_)[\\s]*([\\S]+)[\\s]+([\\S]+)[\\s]*;[\\s]$"; //1->type,2->Type,3->framesNum,4->signalName,3->target and value(split by )
+            string commentPattern = @"^CM_[\s]+([\S]+?)[\s]+([0-9]*)[\s]*([a-zA-z0-9]*?)[\s]+" + "\"([\\S\\s]+?)\"" + @";[\s]*$"; //1->type,2->framesNum/Optional,3->Name,4->target and value(split by )
+            foreach (Match match in Regex.Matches (dbcText, commentPattern, RegexOptions.Multiline))
+            {
+                switch (match.Groups[1].Value)
+                {
+                    case NodeItem.TypeHead:
+                        NodeList.Where (ele => ele.NodeName.Equals (match.Groups[3].Value)).FirstOrDefault ().Comment = match.Groups[4].Value;
+                        break;
+                    case MessageItem.TypeHead:
+                        NodeList.SelectMany (node => node.ReceiveMessages.Concat (node.TransimitMessages)).Distinct ().Where (ele => ele.MessageId == uint.Parse (match.Groups[2].Value)).FirstOrDefault ().Comment = match.Groups[4].Value;
+                        break;
+                    case SignalItem.TypeHead:
+                        NodeList.SelectMany (node => node.ReceiveMessages.Concat (node.TransimitMessages)).Distinct ().Where (ele => ele.MessageId == uint.Parse (match.Groups[2].Value)).SelectMany (message => message.SignalList).Where (ele => ele.SignalName.Equals (match.Groups[3].Value)).FirstOrDefault ().Comment = match.Groups[4].Value;
+                        break;
+                }
 
+            }
+        }
+        internal static void ReadValueTableAndAttributeTable (IList<NodeItem> NodeList, string dbcText)
+        {
+            string valueTableLinePattern = @"^VAL_[\s]+([0-9]*)[\s]+([a-zA-z0-9]+?)[\s]+" + "([\"\\S\\s]+)" + @";[\s]*$";
+            string valueTablePattern = @"([0-9]+)[\s]*" + "\"([\\S\\s]+?)\"";
+            foreach (Match match in Regex.Matches (dbcText, valueTableLinePattern, RegexOptions.Multiline))
+            {
+                var signal = NodeList.SelectMany (node => node.ReceiveMessages.Concat (node.TransimitMessages)).Distinct ().Where (ele => ele.MessageId == uint.Parse (match.Groups[1].Value)).SelectMany (message => message.SignalList).Where (ele => ele.SignalName.Equals (match.Groups[2].Value)).FirstOrDefault ();
+                foreach (Match subMatch in Regex.Matches (match.Groups[3].Value, valueTablePattern, RegexOptions.Multiline))
+                {
+                    signal.ValueTable[float.Parse (subMatch.Groups[1].Value)] = subMatch.Groups[2].Value;
+                }
+            }
         }
         internal static IList<MessageItem> ParserMessageBlocks (string dbcText)
         {
